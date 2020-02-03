@@ -10,7 +10,7 @@
     "url": "https://github.com/mactkg/vscode-sonic-pi.git"
   },
   "engines": {
-    "vscode": "^1.24.0"
+    "vscode": "^1.30.0"
   },
   "categories": [
     "Other"
@@ -18,7 +18,8 @@
   "activationEvents": [
     "onCommand:extension.runCode",
     "onCommand:extension.stopAll",
-    "onCommand:extension.restart"
+    "onCommand:extension.restart",
+    "onCommand:sonicpi.codehelp.reload"
   ],
   "main": "./out/extension",
   "contributes": {
@@ -34,6 +35,10 @@
       {
         "command": "extension.restart",
         "title": "Stop All Sounds and Run Code on Sonic Pi"
+      },
+      {
+        "command": "sonicpi.codehelp.reload",
+        "title": "SonicPi Codehelp Reload"
       }
     ]
   },
@@ -45,14 +50,16 @@
     "test": "npm run compile && node ./node_modules/vscode/bin/test"
   },
   "devDependencies": {
-    "typescript": "^2.6.1",
+    "typescript": "^3.6.2",
     "vscode": "^1.1.36",
     "tslint": "^5.20.1",
     "@types/node": "^7.10.9",
+    "@types/js-yaml": "^3.12.1",
     "@types/mocha": "^2.2.42"
   },
   "dependencies": {
-    "iconv-lite": "^0.5.0",
+    "iconv-lite": "^0.5.1",
+    "js-yaml": "^3.13.1",
     "osc-js": "^1.2.2"
   }
 }
