@@ -1,11 +1,13 @@
 'use strict';
-import { window, commands, ExtensionContext, Range, TextEditor } from 'vscode';
+import { window, commands, ExtensionContext, Range, languages, TextEditor } from 'vscode';
 import { Config } from './config';
+import { SonicPiLanguageHelpProvider } from './codehelp';
 import * as OSC from 'osc-js';
 import * as ICONV from 'iconv-lite';
 
 export function activate(context: ExtensionContext) {
     let sonicPi = new SonicPi();
+    const hoveAndMarkdownProvider = new SonicPiLanguageHelpProvider(context.extensionPath);
 
     let runCodeCmd = commands.registerCommand('extension.runCode', () => {
         sonicPi.runCode();
@@ -21,10 +23,15 @@ export function activate(context: ExtensionContext) {
             sonicPi.runCode();
         }, 500);
     });
+    [languages.registerHoverProvider, languages.registerCompletionItemProvider]
+        .forEach((regFunc:((selector:any, provider:any) => void)) => {
+        regFunc({scheme:"*", pattern: '**/*.rb'}, hoveAndMarkdownProvider);
+    });
 
     context.subscriptions.push(runCodeCmd);
     context.subscriptions.push(stopAllCmd);
     context.subscriptions.push(restartCmd);
+    context.subscriptions.push(...hoveAndMarkdownProvider.createCommands());
     context.subscriptions.push(sonicPi);
 }
 
